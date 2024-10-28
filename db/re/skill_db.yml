@@ -7018,8 +7018,8 @@ Body:
       ItemCost:
         - Item: Germination_Breed
           Amount: 1
-        - Item: Seed_Of_Life
-          Amount: 1
+        # - Item: Seed_Of_Life
+        #   Amount: 1
     Status: Homun_Time
   - Id: 244
     Name: AM_REST
@@ -29708,9 +29708,6 @@ Body:
       IsQuest: true
     Requires:
       SpCost: 30
-      ItemCost:
-        - Item: Buy_Market_Permit
-          Amount: 1
   - Id: 2536
     Name: ALL_GUARDIAN_RECALL
     Description: Guardian's Recall
