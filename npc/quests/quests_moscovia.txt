@@ -257,20 +257,8 @@ moscovia,171,71,3	script	Berbayeff#npc	4_M_RUSMAN2,{
 // Bulletin Board - List Tide Times
 //----------------------------------------------------------------------------
 moscovia,135,52,0	script	Bulletin Board#npc	2_BULLETIN_BOARD,{
-	mes "[Charabel Schedule]";
-	mes "NOTICE, due to the varying";
-	mes "tides here in Moscovia,";
-	mes "the charabel can only";
-	mes "depart when the tide is low.";
-	next;
-	mes "[Charabel Schedule]";
-	mes "The Charabel can depart";
-	mes "between the following times:";
-	mes "^0000FF12:00am PST^000000 to ^0000FF3:00am PST";
-	mes "^0000FF6:00am PST^000000 to ^0000FF9:00am PST";
-	mes "^0000FF12:00pm PST^000000 to ^0000FF3:00pm PST";
-	mes "^0000FF6:00pm PST^000000 to ^0000FF9:00pm PST";
-	close;
+	warp "mosk_fild02",204,54;
+	end;
 }
 
 //----------------------------------------------------------------------------
@@ -10650,15 +10638,15 @@ mosk_dun02,57,220,0	script	House Ghost Jar#rus43	HIDDEN_NPC,{
 			cutin "",255;
 			switch( .@rucard_game01 ) {
 			case 1:
-				cutin "Æ÷¸µÄ«µå",4; // Poring Card
+				cutin "ï¿½ï¿½ï¿½ï¿½Ä«ï¿½ï¿½",4; // Poring Card
 				.@win_string$ = "You are good. Can you do it next time?";
 				break;
 			case 2:
-				cutin "¿£Á©¸µÄ«µå",4; // Angeling Card
+				cutin "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä«ï¿½ï¿½",4; // Angeling Card
 				.@win_string$ = "You are pretty good at this. Ok, but can you do it again?";
 				break;
 			case 3:
-				cutin "°í½ºÆ®¸µÄ«µå",4; // Ghostring Card
+				cutin "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½Ä«ï¿½ï¿½",4; // Ghostring Card
 				.@win_string$ = "You are pretty good at this. Ok, but can you do it again?";
 				break;
 			}
