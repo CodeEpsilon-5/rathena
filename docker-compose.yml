@@ -1,0 +1,85 @@
+services:
+    db:
+        image: "mariadb:lts"
+        container_name: "rathena_db"
+        ports:
+            - "3306:3306" # allow DB connections from host
+        volumes:
+            - "./sql-files/:/docker-entrypoint-initdb.d/:ro" # initialize db with ./sql-files
+            - "rathenadb:/var/lib/mysql" # save database to local disk
+        environment:
+            MYSQL_ROOT_PASSWORD: ragnarok
+            MYSQL_DATABASE: ragnarok
+            MYSQL_USER: ragnarok
+            MYSQL_PASSWORD: ragnarok
+
+    login:
+        image: "rathena-login:${PACKET_VER}"
+        container_name: "rathena-login"
+        ports:
+            - "6900:6900" # login server
+        volumes:
+            - "./conf/import:/rathena/conf/import:ro"
+        build:
+            context: .
+            dockerfile: ./tools/docker/Dockerfile
+            target: login-server
+            args:
+                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
+        depends_on:
+            - db
+
+    char:
+        image: "rathena-char:${PACKET_VER}"
+        container_name: "rathena-char"
+        ports:
+            - "6121:6121" # char server
+        volumes:
+            - "./db:/rathena/db:ro"
+            - "./conf/import:/rathena/conf/import:ro"
+        build:
+            context: .
+            dockerfile: ./tools/docker/Dockerfile
+            target: char-server
+            args:
+                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
+        depends_on:
+            - login
+
+    map:
+        image: "rathena-map:${PACKET_VER}"
+        container_name: "rathena-map"
+        ports:
+            - "5121:5121" # map server
+        volumes:
+            - "./db:/rathena/db:ro"
+            - "./conf/import:/rathena/conf/import:ro"
+            - "./conf/msg_conf/import:/rathena/conf/msg_conf/import:ro"
+            - "./npc:/rathena/npc:ro"
+        build:
+            context: .
+            dockerfile: ./tools/docker/Dockerfile
+            target: map-server
+            args:
+                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
+        depends_on:
+            - char
+
+    web:
+        image: "rathena-web:${PACKET_VER}"
+        container_name: "rathena-web"
+        ports:
+            - "8888:8888" # web server
+        volumes:
+            - "./conf/import:/rathena/conf/import:ro"
+        build:
+            context: .
+            dockerfile: ./tools/docker/Dockerfile
+            target: web-server
+            args:
+                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
+        depends_on:
+            - char
+
+volumes:
+    rathenadb:
