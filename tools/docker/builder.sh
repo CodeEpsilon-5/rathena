@@ -13,9 +13,16 @@ if [ "${runBuild}" -eq "1" ]; then
   if [ ! -f /rathena/make ]; then
     echo "Warning: ./configure will be executed with provided values";
     echo "Make sure you have set the variables you want in the docker-compose.yml file";
-    echo $BUILDER_CONFIGURE
-    # sleep 5
-    ./configure $BUILDER_CONFIGURE
+    cat << EOF
+--enable-packetver=${PACKET_VER} \
+--enable-debug=${DEBUG} \
+--enable-web-service=${ENABLE_WEB_SERVICE}
+EOF
+    sleep 15
+    ./configure \
+      --enable-packetver=${PACKET_VER} \
+      --enable-debug=${DEBUG} \
+      --enable-web-service=${ENABLE_WEB_SERVICE}
   fi
 
   make clean server;

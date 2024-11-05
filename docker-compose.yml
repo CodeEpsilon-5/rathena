@@ -1,3 +1,13 @@
+x-build-context: &build
+    context: .
+    dockerfile: ./tools/docker/Dockerfile
+
+x-configure-args: &args
+    PACKET_VER: ${PACKET_VER}
+    DEBUG: ${DEBUG}
+    ENABLE_WEB_SERVICE: ${ENABLE_WEB}
+
+
 services:
     db:
         image: "mariadb:lts"
@@ -21,11 +31,9 @@ services:
         volumes:
             - "./conf/import:/rathena/conf/import:ro"
         build:
-            context: .
-            dockerfile: ./tools/docker/Dockerfile
+            <<: *build
+            args: *args
             target: login-server
-            args:
-                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
         depends_on:
             - db
 
@@ -38,11 +46,9 @@ services:
             - "./db:/rathena/db:ro"
             - "./conf/import:/rathena/conf/import:ro"
         build:
-            context: .
-            dockerfile: ./tools/docker/Dockerfile
+            <<: *build
+            args: *args
             target: char-server
-            args:
-                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
         depends_on:
             - login
 
@@ -57,11 +63,9 @@ services:
             - "./conf/msg_conf/import:/rathena/conf/msg_conf/import:ro"
             - "./npc:/rathena/npc:ro"
         build:
-            context: .
-            dockerfile: ./tools/docker/Dockerfile
+            <<: *build
+            args: *args
             target: map-server
-            args:
-                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
         depends_on:
             - char
 
@@ -73,11 +77,9 @@ services:
         volumes:
             - "./conf/import:/rathena/conf/import:ro"
         build:
-            context: .
-            dockerfile: ./tools/docker/Dockerfile
+            <<: *build
+            args: *args
             target: web-server
-            args:
-                BUILDER_CONFIGURE: "--enable-packetver=${PACKET_VER} --enable-web-service --enable-debug=${DEBUG}"
         depends_on:
             - char
 

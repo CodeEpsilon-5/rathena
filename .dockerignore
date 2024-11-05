@@ -4,3 +4,6 @@
 Dockerfile
 docker-compose.yml
 ./*-server
+
+!.git/refs/remotes/origin/master
+!.git/refs/heads/master
